@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>CodeSync — совместный редактор</title>
+  <!-- JSZip для скачивания проекта -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    /* ===== CSS-переменные (темы) ===== */
+    :root {
+      /* Светлая тема (по умолчанию) */
+      --bg-app: #ffffff;
+      --bg-header: #fafafa;
+      --bg-left: #f5f5f5;
+      --bg-file-hover: #e8e8e8;
+      --bg-file-active: #e0e0e0;
+      --bg-participant: #fafafa;
+      --bg-terminal: #f9f9f9;
+      --bg-terminal-header: #f0f0f0;
+      --bg-modal: #ffffff;
+      --bg-input: #ffffff;
+      --bg-btn-primary: #007acc;
+      --bg-btn-primary-hover: #005a9e;
+      --bg-btn-secondary: #f5f5f5;
+      --bg-btn-secondary-border: #e0e0e0;
+      --bg-btn-cancel: #f0f0f0;
+      --bg-badge: #e8f0fe;
+      --bg-error: #ffebee;
+      --bg-toast: #333333;
+
+      --text-primary: #1e1e1e;
+      --text-secondary: #555555;
+      --text-muted: #888888;
+      --text-inverse: #ffffff;
+      --text-error: #c62828;
+      --text-link: #007acc;
+
+      --border-color: #e0e0e0;
+      --border-active: #007acc;
+      --shadow-modal: 0 20px 35px rgba(0,0,0,0.2);
+      --shadow-toast: 0 0 10px rgba(0,0,0,0.3);
+
+      --scrollbar-track: #f0f0f0;
+      --scrollbar-thumb: #c1c1c1;
+    }
