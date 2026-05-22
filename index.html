@@ -295,3 +295,76 @@
       align-items: center;
       gap: 16px;
     }
+
+    /* Переключатель тем */
+    .theme-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-left);
+      padding: 4px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      transition: background 0.2s, transform 0.1s;
+      color: var(--text-secondary);
+    }
+
+    .theme-btn:hover {
+      background: var(--bg-file-hover);
+    }
+
+    .theme-btn.active {
+      background: var(--bg-btn-primary);
+      color: var(--text-inverse);
+      transform: scale(1.05);
+    }
+
+    .share {
+      background: var(--bg-btn-primary);
+      color: var(--text-inverse);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      line-height: 1;
+      transition: background 0.2s;
+    }
+    .share:hover {
+      background: var(--bg-btn-primary-hover);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #ccc;
+      border-radius: 50%;
+    }
+
+    .status-dot.connected {
+      background: #2e7d32;
+      box-shadow: 0 0 6px #4caf50;
+    }
+
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
