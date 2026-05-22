@@ -244,3 +244,54 @@
       background: var(--bg-input);
       color: var(--text-primary);
     }
+
+    /* ===== Редактор ===== */
+    .editor {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      cursor: default;
+    }
+
+    .room-badge {
+      background: var(--bg-badge);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: monospace;
+      color: var(--text-link);
+      cursor: pointer;
+      transition: background 0.1s;
+      user-select: none;
+    }
+
+    .room-badge:hover {
+      filter: brightness(0.95);
+    }
+
+    .room-badge:active {
+      filter: brightness(0.9);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
