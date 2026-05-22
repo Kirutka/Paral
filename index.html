@@ -693,3 +693,132 @@
       border-radius: 4px;
       display: none;
     }
+
+    /* ===== Модальные окна ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0s 0.2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal {
+      background: var(--bg-modal);
+      border-radius: 16px;
+      box-shadow: var(--shadow-modal);
+      width: 360px;
+      max-width: 90%;
+      padding: 24px;
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+      color: var(--text-primary);
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .modal p {
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      outline: none;
+      background: var(--bg-input);
+      color: var(--text-primary);
+    }
+
+    .modal input:focus {
+      border-color: var(--border-active);
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .modal-buttons button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .modal-buttons .cancel {
+      background: var(--bg-btn-cancel);
+      color: var(--text-primary);
+    }
+
+    .modal-buttons .ok {
+      background: var(--bg-btn-primary);
+      color: var(--text-inverse);
+    }
+
+    .modal-buttons .ok:hover {
+      background: var(--bg-btn-primary-hover);
+    }
+
+    .copy-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-toast);
+      color: var(--text-inverse);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      z-index: 1100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      box-shadow: var(--shadow-toast);
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+    }
+
+    /* Убрать outline при ресайзе */
+    body.resizing-horizontal {
+      user-select: none;
+      cursor: col-resize;
+    }
+    body.resizing-vertical {
+      user-select: none;
+      cursor: ns-resize;
+    }
+  </style>
