@@ -155,3 +155,92 @@
       flex-direction: column;
       overflow: hidden;
     }
+
+    /* ===== Экран логина ===== */
+    .login {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      background: var(--bg-app);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .logo-icon {
+      background: var(--bg-btn-primary);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-inverse);
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .login-title {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin: 20px 0 30px;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .btn {
+      background: var(--bg-btn-primary);
+      color: var(--text-inverse);
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--bg-btn-primary-hover);
+    }
+
+    .btn.secondary {
+      background: var(--bg-btn-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--bg-btn-secondary-border);
+    }
+
+    .join {
+      display: flex;
+      gap: 10px;
+    }
+
+    .join input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      background: var(--bg-input);
+      color: var(--text-primary);
+    }
