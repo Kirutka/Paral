@@ -903,3 +903,17 @@
   </div>
   <div id="errorMsg"></div>
 </div>
+
+<!-- Модальное окно для ввода имени и пароля -->
+<div id="authModal" class="modal-overlay">
+  <div class="modal">
+    <h3 id="authTitle">Введите имя</h3>
+    <input type="text" id="authNameInput" placeholder="Ваше имя" autocomplete="off">
+    <input type="password" id="authPasswordInput" placeholder="Пароль (оставьте пустым, если нет)" autocomplete="off">
+    <p id="authHint" style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;"></p>
+    <div class="modal-buttons">
+      <button class="cancel" id="authCancel">Отмена</button>
+      <button class="ok" id="authOk">Продолжить</button>
+    </div>
+  </div>
+</div>
