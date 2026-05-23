@@ -839,3 +839,67 @@
       </div>
     </div>
   </div>
+<div id="editor-screen" class="editor hidden">
+    <div class="header">
+      <div class="header-left">
+        <div class="logo-icon">{ }</div>
+        <span class="logo-text">CodeSync</span>
+        <span id="roomBadge" class="room-badge" title="Нажмите, чтобы скопировать ID комнаты">#Загрузка...</span>
+        <button id="shareBtn" class="share" title="Скопировать ссылку для приглашения">🔗</button>
+      </div>
+      <div class="header-right">
+        <!-- Переключатель тем -->
+        <div class="theme-toggle">
+          <button class="theme-btn" data-theme="light" title="Светлая тема">☀️</button>
+          <button class="theme-btn" data-theme="soft" title="Нейтральная тема">🌗</button>
+          <button class="theme-btn" data-theme="dark" title="Тёмная тема">🌙</button>
+        </div>
+        <!-- Новая кнопка скачивания -->
+        <button id="downloadBtn" class="share" title="Скачать все файлы проекта ZIP-архивом">📦</button>
+        <button id="leaveBtn" class="share" title="Выйти из комнаты">🚪</button>
+        <div class="status">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText">Подключение...</span>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <!-- Левая панель -->
+      <div class="left-panel" id="leftPanel">
+        <div class="file-panel" id="filePanel">
+          <div class="file-header">
+            <span>Файлы</span>
+            <button id="newFileBtn" class="plus-btn" title="Новый файл">+</button>
+          </div>
+          <div id="fileList" class="file-list">
+            <div class="empty-files">Нет файлов<br>Нажмите +, чтобы создать</div>
+          </div>
+        </div>
+        <div id="splitterVertical" class="resize-handle-vertical"></div>
+        <div class="participants-section" id="participantsSection">
+          <div class="participants-header" id="participantsHeader">Участники (0)</div>
+          <div class="participants-list-container">
+            <ul id="participantsList" class="participants"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="resizeHandleHorizontal" class="resize-handle-horizontal"></div>
+
+      <!-- Центральная область -->
+      <div class="editor-pane">
+        <div id="monaco"></div>
+        <div id="resizeHandle" class="resize-handle"></div>
+        <div id="output-container" class="output-container">
+          <div class="terminal-header">
+            <button id="runBtn">▶</button>
+            <span class="terminal-title"></span>
+            <button id="clearBtn" class="clear-btn" title="Очистить терминал">✕</button>
+          </div>
+          <div id="output" class="output">// Ожидание запуска...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="errorMsg"></div>
+</div>
