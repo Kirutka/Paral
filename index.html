@@ -949,3 +949,150 @@
   </div>
 </div>
 <div id="copyToast" class="copy-toast">ID комнаты скопирован</div>
+<script type="module" src="main.js"></script>
+<script>
+  (function() {
+    // === Ресайз терминала (вертикальный) ===
+    const resizeHandleTerminal = document.getElementById('resizeHandle');
+    const outputContainer = document.getElementById('output-container');
+    const editorPane = document.querySelector('.editor-pane');
+    let startYTerm = 0, startHeightTerm = 0, isResizingTerm = false;
+
+    if (resizeHandleTerminal && outputContainer) {
+      const onMouseMoveTerm = (e) => {
+        if (!isResizingTerm) return;
+        const deltaY = e.clientY - startYTerm;
+        let newHeight = startHeightTerm - deltaY;
+        const minHeight = 80;
+        const maxHeight = editorPane.clientHeight - 100;
+        newHeight = Math.min(maxHeight, Math.max(minHeight, newHeight));
+        outputContainer.style.height = newHeight + 'px';
+      };
+      const onMouseUpTerm = () => {
+        isResizingTerm = false;
+        document.removeEventListener('mousemove', onMouseMoveTerm);
+        document.removeEventListener('mouseup', onMouseUpTerm);
+        document.body.classList.remove('resizing-vertical');
+        document.body.style.cursor = '';
+      };
+      resizeHandleTerminal.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startYTerm = e.clientY;
+        startHeightTerm = outputContainer.offsetHeight;
+        isResizingTerm = true;
+        document.body.classList.add('resizing-vertical');
+        document.body.style.cursor = 'ns-resize';
+        document.addEventListener('mousemove', onMouseMoveTerm);
+        document.addEventListener('mouseup', onMouseUpTerm);
+      });
+    }
+
+    // === Ресайз высоты панели файлов ===
+    const splitterVertical = document.getElementById('splitterVertical');
+    const filePanel = document.getElementById('filePanel');
+    const leftPanel = document.querySelector('.left-panel');
+    let startYLeft = 0, startFileHeight = 0, isResizingLeft = false;
+
+    if (splitterVertical && filePanel && leftPanel) {
+      const onMouseMoveLeft = (e) => {
+        if (!isResizingLeft) return;
+        const deltaY = e.clientY - startYLeft;
+        let newFileHeight = startFileHeight + deltaY;
+        const minFileHeight = 80;
+        const maxFileHeight = leftPanel.clientHeight - 100;
+        newFileHeight = Math.min(maxFileHeight, Math.max(minFileHeight, newFileHeight));
+        filePanel.style.height = newFileHeight + 'px';
+      };
+      const onMouseUpLeft = () => {
+        isResizingLeft = false;
+        document.removeEventListener('mousemove', onMouseMoveLeft);
+        document.removeEventListener('mouseup', onMouseUpLeft);
+        document.body.classList.remove('resizing-vertical');
+        document.body.style.cursor = '';
+      };
+      splitterVertical.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startYLeft = e.clientY;
+        startFileHeight = filePanel.offsetHeight;
+        isResizingLeft = true;
+        document.body.classList.add('resizing-vertical');
+        document.body.style.cursor = 'ns-resize';
+        document.addEventListener('mousemove', onMouseMoveLeft);
+        document.addEventListener('mouseup', onMouseUpLeft);
+      });
+    }
+
+    // === Горизонтальный ресайз левой панели ===
+    const resizeHandleHorizontal = document.getElementById('resizeHandleHorizontal');
+    const leftPanelElement = document.getElementById('leftPanel');
+    let startX = 0, startWidth = 0, isResizingWidth = false;
+
+    if (resizeHandleHorizontal && leftPanelElement) {
+      const onMouseMoveHorizontal = (e) => {
+        if (!isResizingWidth) return;
+        const deltaX = e.clientX - startX;
+        let newWidth = startWidth + deltaX;
+        const minWidth = 180;
+        const maxWidth = 500;
+        newWidth = Math.min(maxWidth, Math.max(minWidth, newWidth));
+        leftPanelElement.style.width = newWidth + 'px';
+        try {
+          localStorage.setItem('codesync_left_panel_width', newWidth);
+        } catch(e) {}
+      };
+      const onMouseUpHorizontal = () => {
+        isResizingWidth = false;
+        document.removeEventListener('mousemove', onMouseMoveHorizontal);
+        document.removeEventListener('mouseup', onMouseUpHorizontal);
+        document.body.classList.remove('resizing-horizontal');
+        document.body.style.cursor = '';
+        if (resizeHandleHorizontal) resizeHandleHorizontal.classList.remove('active');
+      };
+      resizeHandleHorizontal.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startX = e.clientX;
+        startWidth = leftPanelElement.offsetWidth;
+        isResizingWidth = true;
+        document.body.classList.add('resizing-horizontal');
+        document.body.style.cursor = 'col-resize';
+        if (resizeHandleHorizontal) resizeHandleHorizontal.classList.add('active');
+        document.addEventListener('mousemove', onMouseMoveHorizontal);
+        document.addEventListener('mouseup', onMouseUpHorizontal);
+      });
+    }
+
+    // Восстановление ширины левой панели
+    try {
+      const savedWidth = localStorage.getItem('codesync_left_panel_width');
+      if (savedWidth && leftPanelElement) {
+        let w = parseInt(savedWidth, 10);
+        if (!isNaN(w) && w >= 180 && w <= 500) {
+          leftPanelElement.style.width = w + 'px';
+        }
+      }
+    } catch(e) {}
+
+    // Обновление счётчика участников
+    const participantsHeader = document.getElementById('participantsHeader');
+    const participantsList = document.getElementById('participantsList');
+    if (participantsHeader && participantsList) {
+      const observer = new MutationObserver(() => {
+        const count = participantsList.children.length;
+        participantsHeader.textContent = `Участники (${count})`;
+      });
+      observer.observe(participantsList, { childList: true, subtree: true });
+    }
+
+    // Начальная высота filePanel
+    if (filePanel && !filePanel.style.height) {
+      const computedHeight = filePanel.offsetHeight;
+      if (computedHeight > 0) {
+        filePanel.style.height = computedHeight + 'px';
+      } else {
+        filePanel.style.height = '40%';
+      }
+    }
+  })();
+</script>
+</body>
+</html>
