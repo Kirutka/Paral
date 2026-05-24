@@ -917,3 +917,35 @@
     </div>
   </div>
 </div>
+<!-- Другие модальные окна (новый файл, переименование, удаление) -->
+<div id="newFileModal" class="modal-overlay">
+  <div class="modal">
+    <h3>Имя нового файла</h3>
+    <input type="text" id="newFileNameInput" placeholder="например: main.py" autocomplete="off">
+    <div class="modal-buttons">
+      <button class="cancel" id="newFileCancel">Отмена</button>
+      <button class="ok" id="newFileOk">Создать</button>
+    </div>
+  </div>
+</div>
+<div id="renameFileModal" class="modal-overlay">
+  <div class="modal">
+    <h3>Переименовать файл</h3>
+    <input type="text" id="renameFileNameInput" placeholder="новое_имя.py" autocomplete="off">
+    <div class="modal-buttons">
+      <button class="cancel" id="renameFileCancel">Отмена</button>
+      <button class="ok" id="renameFileOk">Переименовать</button>
+    </div>
+  </div>
+</div>
+<div id="deleteFileModal" class="modal-overlay">
+  <div class="modal">
+    <h3>Удалить файл?</h3>
+    <p id="deleteFileMessage">Файл будет удалён безвозвратно для всех участников.</p>
+    <div class="modal-buttons">
+      <button class="cancel" id="deleteFileCancel">Отмена</button>
+      <button class="ok" id="deleteFileOk">Удалить</button>
+    </div>
+  </div>
+</div>
+<div id="copyToast" class="copy-toast">ID комнаты скопирован</div>
