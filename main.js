@@ -37,3 +37,47 @@ const pythonModules = [
   'subprocess', 'socket', 'http', 'urllib', 'csv', 'sqlite3', 'xml', 'html', 'hashlib',
   'base64', 'struct', 'pickle', 'copy', 'pprint', 'traceback', 'unittest', 'doctest'
 ];
+const pythonSnippets = [
+  {
+    label: 'ifmain',
+    detail: 'if __name__ == "__main__"',
+    insertText: 'if __name__ == "__main__":\n\t${1:main()}',
+    documentation: 'Точка входа при запуске скрипта'
+  },
+  {
+    label: 'def',
+    detail: 'Определение функции',
+    insertText: 'def ${1:function_name}(${2:params}):\n\t${3:pass}',
+    documentation: 'Создание новой функции'
+  },
+  {
+    label: 'class',
+    detail: 'Определение класса',
+    insertText: 'class ${1:ClassName}:\n\tdef __init__(self, ${2:params}):\n\t\t${3:pass}',
+    documentation: 'Создание нового класса'
+  },
+  {
+    label: 'for',
+    detail: 'Цикл for',
+    insertText: 'for ${1:item} in ${2:iterable}:\n\t${3:pass}',
+    documentation: 'Цикл for по итератору'
+  },
+  {
+    label: 'while',
+    detail: 'Цикл while',
+    insertText: 'while ${1:condition}:\n\t${2:pass}',
+    documentation: 'Цикл while с условием'
+  },
+  {
+    label: 'try',
+    detail: 'Блок try/except',
+    insertText: 'try:\n\t${1:code}\nexcept ${2:Exception} as e:\n\t${3:handle}',
+    documentation: 'Обработка исключений'
+  },
+  {
+    label: 'with',
+    detail: 'Менеджер контекста',
+    insertText: 'with ${1:open("file.txt")} as ${2:f}:\n\t${3:code}',
+    documentation: 'Контекстный менеджер (например, для файлов)'
+  }
+];
