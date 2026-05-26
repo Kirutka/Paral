@@ -81,3 +81,61 @@ const pythonSnippets = [
     documentation: 'Контекстный менеджер (например, для файлов)'
   }
 ];
+monaco.languages.registerCompletionItemProvider('python', {
+  triggerCharacters: ['.', ' '],
+  provideCompletionItems: (model, position) => {
+    const word = model.getWordUntilPosition(position);
+    const range = {
+      startLineNumber: position.lineNumber,
+      endLineNumber: position.lineNumber,
+      startColumn: word.startColumn,
+      endColumn: word.endColumn
+    };
+
+    const suggestions = [];
+
+    pythonKeywords.forEach(keyword => {
+      suggestions.push({
+        label: keyword,
+        kind: monaco.languages.CompletionItemKind.Keyword,
+        insertText: keyword,
+        range: range,
+        detail: 'Ключевое слово Python'
+      });
+    });
+
+    pythonBuiltins.forEach(builtin => {
+      suggestions.push({
+        label: builtin,
+        kind: monaco.languages.CompletionItemKind.Function,
+        insertText: builtin,
+        range: range,
+        detail: 'Встроенная функция Python'
+      });
+    });
+
+    pythonModules.forEach(module => {
+      suggestions.push({
+        label: module,
+        kind: monaco.languages.CompletionItemKind.Module,
+        insertText: module,
+        range: range,
+        detail: 'Стандартный модуль Python'
+      });
+    });
+
+    pythonSnippets.forEach(snippet => {
+      suggestions.push({
+        label: snippet.label,
+        kind: monaco.languages.CompletionItemKind.Snippet,
+        insertText: snippet.insertText,
+        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        range: range,
+        detail: snippet.detail,
+        documentation: snippet.documentation
+      });
+    });
+
+    return { suggestions };
+  }
+});
