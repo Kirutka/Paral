@@ -139,3 +139,30 @@ monaco.languages.registerCompletionItemProvider('python', {
     return { suggestions };
   }
 });
+// ----------------------------------------------------------------------
+// Управление темами
+// ----------------------------------------------------------------------
+
+function defineCustomThemes() {
+  monaco.editor.defineTheme('soft', {
+    base: 'vs',
+    inherit: true,
+    rules: [
+      { token: 'comment', foreground: '6a7a8a', fontStyle: 'italic' },
+      { token: 'keyword', foreground: '5a7a8a' },
+      { token: 'string', foreground: '6c8c9c' },
+      { token: 'number', foreground: 'b36b6b' },
+      { token: 'function', foreground: '5a7a8a' },
+      { token: 'type', foreground: '6a8a7a' },
+    ],
+    colors: {
+      'editor.background': '#f0f2f5',
+      'editor.foreground': '#2c3e50',
+      'editorLineNumber.foreground': '#9aa8b8',
+      'editor.selectionBackground': '#c5d0d8',
+      'editor.inactiveSelectionBackground': '#d5dce4',
+      'editorCursor.foreground': '#5a7a8a',
+      'editorWhitespace.foreground': '#c5c8ce',
+    }
+  });
+}
