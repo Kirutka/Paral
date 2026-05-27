@@ -166,3 +166,23 @@ function defineCustomThemes() {
     }
   });
 }
+function applyTheme(theme) {
+  document.body.classList.remove('theme-light', 'theme-dark', 'theme-soft');
+  document.body.classList.add(`theme-${theme}`);
+
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
+  });
+
+  if (editor) {
+    let monacoTheme = 'vs';
+    if (theme === 'dark') monacoTheme = 'vs-dark';
+    else if (theme === 'soft') monacoTheme = 'soft';
+    else monacoTheme = 'vs';
+    editor.updateOptions({ theme: monacoTheme });
+  }
+
+  try {
+    localStorage.setItem('codesync_theme', theme);
+  } catch(e) {}
+}
