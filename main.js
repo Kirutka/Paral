@@ -186,3 +186,13 @@ function applyTheme(theme) {
     localStorage.setItem('codesync_theme', theme);
   } catch(e) {}
 }
+function loadSavedTheme() {
+  let theme = 'light';
+  try {
+    const saved = localStorage.getItem('codesync_theme');
+    if (saved && ['light', 'dark', 'soft'].includes(saved)) {
+      theme = saved;
+    }
+  } catch(e) {}
+  applyTheme(theme);
+}
