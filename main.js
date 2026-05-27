@@ -238,3 +238,46 @@ function showToast(message) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
+
+// ----------------------------------------------------------------------
+// Модальные окна (общие)
+// ----------------------------------------------------------------------
+function showInputModal(modalId, defaultValue = '') {
+  return new Promise((resolve) => {
+    const overlay = $(modalId);
+    if (!overlay) return resolve(null);
+    const input = overlay.querySelector('input');
+    const okBtn = overlay.querySelector('.ok');
+    const cancelBtn = overlay.querySelector('.cancel');
+    input.value = defaultValue;
+    overlay.classList.add('active');
+    input.focus();
+
+    const onOk = () => {
+      cleanup();
+      resolve(input.value.trim());
+    };
+    const onCancel = () => {
+      cleanup();
+      resolve(null);
+    };
+    const onKeydown = (e) => {
+      if (e.key === 'Enter') onOk();
+      else if (e.key === 'Escape') onCancel();
+    };
+    const onOverlayClick = (e) => {
+      if (e.target === overlay) onCancel();
+    };
+    const cleanup = () => {
+      overlay.classList.remove('active');
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      document.removeEventListener('keydown', onKeydown);
+      overlay.removeEventListener('click', onOverlayClick);
+    };
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    document.addEventListener('keydown', onKeydown);
+    overlay.addEventListener('click', onOverlayClick);
+  });
+}
