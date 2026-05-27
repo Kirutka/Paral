@@ -281,3 +281,42 @@ function showInputModal(modalId, defaultValue = '') {
     overlay.addEventListener('click', onOverlayClick);
   });
 }
+
+function showConfirmModal(modalId, message) {
+  return new Promise((resolve) => {
+    const overlay = $(modalId);
+    if (!overlay) return resolve(false);
+    const messageEl = overlay.querySelector('#deleteFileMessage');
+    if (messageEl) messageEl.textContent = message;
+    const okBtn = overlay.querySelector('.ok');
+    const cancelBtn = overlay.querySelector('.cancel');
+    overlay.classList.add('active');
+
+    const onOk = () => {
+      cleanup();
+      resolve(true);
+    };
+    const onCancel = () => {
+      cleanup();
+      resolve(false);
+    };
+    const onKeydown = (e) => {
+      if (e.key === 'Enter') onOk();
+      else if (e.key === 'Escape') onCancel();
+    };
+    const onOverlayClick = (e) => {
+      if (e.target === overlay) onCancel();
+    };
+    const cleanup = () => {
+      overlay.classList.remove('active');
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      document.removeEventListener('keydown', onKeydown);
+      overlay.removeEventListener('click', onOverlayClick);
+    };
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    document.addEventListener('keydown', onKeydown);
+    overlay.addEventListener('click', onOverlayClick);
+  });
+}
