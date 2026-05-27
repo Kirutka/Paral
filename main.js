@@ -196,3 +196,45 @@ function loadSavedTheme() {
   } catch(e) {}
   applyTheme(theme);
 }
+
+// ----------------------------------------------------------------------
+// Остальной код приложения
+// ----------------------------------------------------------------------
+const $ = (id) => document.getElementById(id);
+const generateRoomId = () => Math.random().toString(36).substring(2, 8).toUpperCase();
+
+const loginScreen = $('login-screen');
+const editorScreen = $('editor-screen');
+const statusDot = $('statusDot');
+const statusText = $('statusText');
+const participantsList = $('participantsList');
+const roomBadge = $('roomBadge');
+const errorMsg = $('errorMsg');
+const fileListDiv = $('fileList');
+const newFileBtn = $('newFileBtn');
+const runBtn = $('runBtn');
+const clearBtn = $('clearBtn');
+const outputDiv = $('output');
+
+let editor = null;
+let provider = null;
+let ydoc = null;
+let filesMap = null;
+let currentFile = null;
+let currentBinding = null;
+let currentRoomId = null;
+
+function showError(msg) {
+  if (!errorMsg) return;
+  errorMsg.textContent = msg;
+  errorMsg.style.display = 'block';
+  setTimeout(() => { errorMsg.style.display = 'none'; }, 8000);
+}
+
+function showToast(message) {
+  const toast = $('copyToast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
