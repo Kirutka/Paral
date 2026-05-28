@@ -320,3 +320,62 @@ function showConfirmModal(modalId, message) {
     overlay.addEventListener('click', onOverlayClick);
   });
 }
+
+// ----------------------------------------------------------------------
+// Новая функция для запроса имени и пароля
+// ----------------------------------------------------------------------
+function showAuthModal(isCreating) {
+  return new Promise((resolve) => {
+    const overlay = $('authModal');
+    if (!overlay) return resolve(null);
+    const title = $('authTitle');
+    const nameInput = $('authNameInput');
+    const passwordInput = $('authPasswordInput');
+    const hint = $('authHint');
+    const okBtn = $('authOk');
+    const cancelBtn = $('authCancel');
+
+    if (isCreating) {
+      title.textContent = 'Создание новой комнаты';
+      hint.textContent = 'Введите пароль, если хотите защитить комнату (можно оставить пустым)';
+    } else {
+      title.textContent = 'Вход в комнату';
+      hint.textContent = 'Введите пароль, если он установлен, или оставьте пустым';
+    }
+
+    nameInput.value = `Dev-${Math.floor(Math.random() * 1000)}`;
+    passwordInput.value = '';
+    overlay.classList.add('active');
+    nameInput.focus();
+
+    const onOk = () => {
+      cleanup();
+      resolve({
+        name: nameInput.value.trim(),
+        password: passwordInput.value.trim()
+      });
+    };
+    const onCancel = () => {
+      cleanup();
+      resolve(null);
+    };
+    const onKeydown = (e) => {
+      if (e.key === 'Enter') onOk();
+      else if (e.key === 'Escape') onCancel();
+    };
+    const onOverlayClick = (e) => {
+      if (e.target === overlay) onCancel();
+    };
+    const cleanup = () => {
+      overlay.classList.remove('active');
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      document.removeEventListener('keydown', onKeydown);
+      overlay.removeEventListener('click', onOverlayClick);
+    };
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    document.addEventListener('keydown', onKeydown);
+    overlay.addEventListener('click', onOverlayClick);
+  });
+}
