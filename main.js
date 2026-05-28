@@ -539,3 +539,34 @@ async function performDeleteFile(filename) {
     renderFileList();
   }
 }
+
+// ----------------------------------------------------------------------
+// Вспомогательные функции для терминала (вывод текста и изображений)
+// ----------------------------------------------------------------------
+function appendText(container, text) {
+  const span = document.createElement('span');
+  span.style.whiteSpace = 'pre-wrap';
+  span.style.display = 'block';
+  span.textContent = text;
+  container.appendChild(span);
+}
+
+function appendImage(container, base64) {
+  const img = document.createElement('img');
+  img.src = `data:image/png;base64,${base64}`;
+  img.style.maxWidth = '100%';
+  img.style.display = 'block';
+  img.style.margin = '5px 0';
+  container.appendChild(img);
+}
+
+function scrollToBottom(container) {
+  container.scrollTop = container.scrollHeight;
+}
+
+function clearTerminal() {
+  if (outputDiv) {
+    outputDiv.innerHTML = '';
+    appendText(outputDiv, '// Терминал очищен\n');
+  }
+}
