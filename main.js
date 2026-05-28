@@ -471,3 +471,26 @@ async function renameFile(oldName, newName) {
 
   showToast(`Файл переименован в "${newName}"`);
 }
+
+async function switchToFile(filename) {
+  if (!filesMap.has(filename)) {
+    showError(`Файл "${filename}" не существует`);
+    return;
+  }
+  currentFile = filename;
+  const yText = filesMap.get(filename);
+  if (!yText) return;
+
+  if (currentBinding) {
+    currentBinding.destroy();
+    currentBinding = null;
+  }
+  const model = editor.getModel();
+  if (model) model.dispose();
+
+  const language = getLanguageFromFilename(filename);
+  const newModel = monaco.editor.createModel(yText.toString(), language);
+  editor.setModel(newModel);
+  currentBinding = new MonacoBinding(yText, newModel, new Set([editor]), provider.awareness);
+  renderFileList();
+}
