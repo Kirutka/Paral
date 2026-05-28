@@ -494,3 +494,21 @@ async function switchToFile(filename) {
   currentBinding = new MonacoBinding(yText, newModel, new Set([editor]), provider.awareness);
   renderFileList();
 }
+
+async function createNewFile() {
+  if (!filesMap) return;
+  const filename = await showInputModal('newFileModal', 'main.py');
+  if (!filename) return;
+  if (!isValidFilename(filename)) {
+    showError('Поддерживаются только файлы .py (Python)');
+    return;
+  }
+  if (filesMap.has(filename)) {
+    showError(`Файл "${filename}" уже существует`);
+    return;
+  }
+  const defaultContent = getDefaultContent(filename);
+  const newYText = new Y.Text(defaultContent);
+  filesMap.set(filename, newYText);
+  await switchToFile(filename);
+}
