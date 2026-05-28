@@ -442,3 +442,32 @@ function renderFileList() {
     fileListDiv.appendChild(div);
   });
 }
+
+async function renameFile(oldName, newName) {
+  if (!filesMap.has(oldName)) {
+    showError(`Файл "${oldName}" не существует`);
+    return;
+  }
+  if (!isValidFilename(newName)) {
+    showError('Поддерживаются только файлы .py (Python)');
+    return;
+  }
+  if (filesMap.has(newName)) {
+    showError(`Файл "${newName}" уже существует`);
+    return;
+  }
+
+  const oldYText = filesMap.get(oldName);
+  const content = oldYText.toString();
+  const newYText = new Y.Text(content);
+
+  filesMap.delete(oldName);
+  filesMap.set(newName, newYText);
+
+  if (currentFile === oldName) {
+    currentFile = newName;
+    await switchToFile(newName);
+  }
+
+  showToast(`Файл переименован в "${newName}"`);
+}
