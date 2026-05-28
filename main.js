@@ -512,3 +512,30 @@ async function createNewFile() {
   filesMap.set(filename, newYText);
   await switchToFile(filename);
 }
+
+async function performDeleteFile(filename) {
+  if (!filesMap.has(filename)) return;
+  if (currentFile === filename) {
+    if (currentBinding) {
+      currentBinding.destroy();
+      currentBinding = null;
+    }
+    const model = editor.getModel();
+    if (model) model.dispose();
+    editor.setModel(null);
+    currentFile = null;
+  }
+  filesMap.delete(filename);
+  const remaining = Array.from(filesMap.keys());
+  if (remaining.length > 0 && currentFile === null) {
+    await switchToFile(remaining[0]);
+  } else if (remaining.length === 0) {
+    renderFileList();
+    const emptyModel = monaco.editor.createModel('// Создайте новый файл, нажав "+" в панели файлов слева\n', 'plaintext');
+    editor.setModel(emptyModel);
+    if (currentBinding) currentBinding.destroy();
+    currentBinding = null;
+  } else {
+    renderFileList();
+  }
+}
