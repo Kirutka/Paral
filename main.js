@@ -379,3 +379,66 @@ function showAuthModal(isCreating) {
     overlay.addEventListener('click', onOverlayClick);
   });
 }
+
+// ----------------------------------------------------------------------
+// Работа с файлами
+// ----------------------------------------------------------------------
+function getLanguageFromFilename(filename) {
+  return 'python';
+}
+
+function getDefaultContent(filename) {
+  return `# Python файл\n\ndef main():\n    print("Hello from ${filename}")\n\nif __name__ == "__main__":\n    main()\n`;
+}
+
+function isValidFilename(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  return ext === 'py';
+}
+
+function renderFileList() {
+  if (!fileListDiv) return;
+  const files = Array.from(filesMap.keys());
+  if (files.length === 0) {
+    fileListDiv.innerHTML = '<div class="empty-files">Нет файлов<br>Нажмите +, чтобы создать</div>';
+    return;
+  }
+  fileListDiv.innerHTML = '';
+  files.forEach(filename => {
+    const div = document.createElement('div');
+    div.className = `file-item ${currentFile === filename ? 'active' : ''}`;
+    div.innerHTML = `
+      <span class="file-name" title="${filename}">${filename}</span>
+      <div class="file-actions">
+        <button class="rename-file" data-filename="${filename}" title="Переименовать">✏️</button>
+        <button class="delete-file" data-filename="${filename}" title="Удалить файл">🗑️</button>
+      </div>
+    `;
+    div.querySelector('.file-name').addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchToFile(filename);
+    });
+    const renameBtn = div.querySelector('.rename-file');
+    renameBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const oldName = filename;
+      showInputModal('renameFileModal', oldName).then(newName => {
+        if (newName && newName !== oldName) {
+          renameFile(oldName, newName);
+        }
+      });
+    });
+    const delBtn = div.querySelector('.delete-file');
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const fileName = filename;
+      showConfirmModal('deleteFileModal', `Файл "${fileName}" будет удалён безвозвратно для всех участников.`)
+        .then(confirmed => {
+          if (confirmed) {
+            performDeleteFile(fileName);
+          }
+        });
+    });
+    fileListDiv.appendChild(div);
+  });
+}
