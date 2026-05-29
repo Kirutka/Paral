@@ -680,3 +680,42 @@ function leaveRoom() {
 
   showToast('Вы вышли из комнаты');
 }
+
+// ---------- Скачивание проекта в ZIP ----------
+async function downloadProject() {
+  if (!filesMap) {
+    showToast('Нет открытого проекта');
+    return;
+  }
+
+  const files = Array.from(filesMap.keys());
+  if (files.length === 0) {
+    showToast('Нет файлов для скачивания');
+    return;
+  }
+
+  try {
+    const zip = new JSZip();
+
+    for (const filename of files) {
+      const yText = filesMap.get(filename);
+      const content = yText.toString();
+      zip.file(filename, content);
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `project-${currentRoomId || 'codesync'}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(`Проект сохранён как ${a.download}`);
+  } catch (err) {
+    console.error(err);
+    showError('Не удалось создать ZIP-архив');
+  }
+}
