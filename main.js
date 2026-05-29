@@ -628,3 +628,55 @@ async function runCurrentCode() {
   }
   scrollToBottom(outputDiv);
 }
+
+// ===== Выход из комнаты (исправленный) =====
+function leaveRoom() {
+  // Переключаем интерфейс
+  loginScreen?.classList.remove('hidden');
+  editorScreen?.classList.add('hidden');
+  window.history.replaceState({}, '', window.location.pathname);
+  currentRoomId = null;
+  if (roomBadge) roomBadge.textContent = '#Загрузка...';
+  if (outputDiv) {
+    outputDiv.innerHTML = '';
+    appendText(outputDiv, '// Ожидание запуска...\n');
+  }
+  if (participantsList) participantsList.innerHTML = '';
+  statusDot?.classList.remove('connected');
+  if (statusText) statusText.textContent = 'Отключено';
+
+  // Уничтожаем все ресурсы
+  if (currentBinding) {
+    try { currentBinding.destroy(); } catch(e) {}
+    currentBinding = null;
+  }
+  if (provider) {
+    try { provider.disconnect(); } catch(e) {}
+    try { provider.destroy(); } catch(e) {}
+    provider = null;
+  }
+  if (ydoc) {
+    try { ydoc.destroy(); } catch(e) {}
+    ydoc = null;
+  }
+  filesMap = null;
+  currentFile = null;
+
+  // Уничтожаем редактор и очищаем DOM
+  if (editor) {
+    try {
+      const model = editor.getModel();
+      if (model) model.dispose();
+      editor.dispose();
+    } catch(e) {}
+    editor = null;
+  }
+
+  // Очищаем контейнер Monaco (оставляем пустой div)
+  const monacoContainer = document.getElementById('monaco');
+  if (monacoContainer) {
+    monacoContainer.innerHTML = '';
+  }
+
+  showToast('Вы вышли из комнаты');
+}
