@@ -719,3 +719,87 @@ async function downloadProject() {
     showError('Не удалось создать ZIP-архив');
   }
 }
+
+// ----------------------------------------------------------------------
+// Инициализация редактора
+// ----------------------------------------------------------------------
+async function initEditor(roomId, userName, password) {
+  // Если редактор уже существует – удаляем его (защита от повторного вызова)
+  if (editor) {
+    try {
+      const model = editor.getModel();
+      if (model) model.dispose();
+      editor.dispose();
+    } catch(e) {}
+    editor = null;
+    const monacoContainer = document.getElementById('monaco');
+    if (monacoContainer) monacoContainer.innerHTML = '';
+  }
+
+  currentRoomId = roomId;
+  if (roomBadge) roomBadge.textContent = `#${roomId}`;
+
+  const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'];
+  const userColor = colors[Math.floor(Math.random() * colors.length)];
+
+  defineCustomThemes();
+
+  // Создаём редактор заново
+  editor = monaco.editor.create(document.getElementById('monaco'), {
+    value: '',
+    language: 'plaintext',
+    theme: 'vs',
+    automaticLayout: true,
+    minimap: { enabled: false },
+    fontSize: 14,
+    fontFamily: 'Consolas, monospace',
+    wordWrap: 'on',
+    quickSuggestions: true,
+    suggestOnTriggerCharacters: true,
+    acceptSuggestionOnEnter: 'on',
+    tabSize: 8,
+    insertSpaces: false,
+    detectIndentation: false,
+  });
+
+  loadSavedTheme();
+
+  ydoc = new Y.Doc();
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const host = window.location.hostname;
+  const wsUrl = `${protocol}//${host}:1234`;
+
+  // Передаём пароль как параметр запроса
+  provider = new WebsocketProvider(wsUrl, roomId, ydoc, {
+    params: { password: password || '' }
+  });
+
+  filesMap = ydoc.getMap('files');
+
+  filesMap.observe(() => renderFileList());
+
+  const existingFiles = Array.from(filesMap.keys());
+  if (existingFiles.length > 0) {
+    await switchToFile(existingFiles[0]);
+  } else {
+    const emptyModel = monaco.editor.createModel('// Создайте новый файл, нажав "+" в панели файлов\n', 'plaintext');
+    editor.setModel(emptyModel);
+    renderFileList();
+  }
+
+  provider.awareness.setLocalStateField('user', { name: userName, color: userColor });
+
+  provider.on('status', ({ status }) => {
+    if (status === 'connected') {
+      statusDot?.classList.add('connected');
+      if (statusText) statusText.textContent = 'Подключено';
+    } else {
+      statusDot?.classList.remove('connected');
+      if (statusText) statusText.textContent = 'Переподключение...';
+    }
+  });
+
+  provider.on('connection-error', (err) => {
+    console.error(err);
+    showError('Ошибка подключения к WebSocket серверу.');
+  });
