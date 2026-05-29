@@ -570,3 +570,61 @@ function clearTerminal() {
     appendText(outputDiv, '// Терминал очищен\n');
   }
 }
+
+// ----------------------------------------------------------------------
+// Запуск кода
+// ----------------------------------------------------------------------
+async function runCurrentCode() {
+  if (!outputDiv) return;
+
+  if (!currentFile) {
+    appendText(outputDiv, '\n// Нет открытого файла\n');
+    scrollToBottom(outputDiv);
+    return;
+  }
+
+  const ext = currentFile.split('.').pop().toLowerCase();
+  if (ext !== 'py') {
+    appendText(outputDiv, `\n// Запуск поддерживается только для .py (Python) файлов\n`);
+    scrollToBottom(outputDiv);
+    return;
+  }
+
+  const model = editor.getModel();
+  if (!model) return;
+  const code = model.getValue();
+
+  const now = new Date();
+  const timestamp = now.toLocaleTimeString();
+  appendText(outputDiv, `\n--- Запуск в ${timestamp} (${currentFile}) ---\n`);
+  appendText(outputDiv, '// Выполнение...\n');
+  scrollToBottom(outputDiv);
+
+  try {
+    const response = await fetch('/api/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, language: 'python' })
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      if (data.parts && Array.isArray(data.parts)) {
+        for (const part of data.parts) {
+          if (part.type === 'text') {
+            appendText(outputDiv, part.content + '\n');
+          } else if (part.type === 'image') {
+            appendImage(outputDiv, part.data);
+          }
+        }
+      } else {
+        appendText(outputDiv, (data.output || '(пустой вывод)') + '\n');
+      }
+    } else {
+      appendText(outputDiv, `// Ошибка: ${data.error || 'Неизвестная ошибка'}\n`);
+    }
+  } catch (err) {
+    appendText(outputDiv, `// Ошибка сети: ${err.message}. Запустите API сервер: npm run api\n`);
+  }
+  scrollToBottom(outputDiv);
+}
