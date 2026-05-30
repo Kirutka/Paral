@@ -803,3 +803,44 @@ async function initEditor(roomId, userName, password) {
     console.error(err);
     showError('Ошибка подключения к WebSocket серверу.');
   });
+
+  // Обработка закрытия соединения из-за ошибки авторизации
+  const ws = provider.ws;
+  if (ws) {
+    ws.addEventListener('close', (event) => {
+      if (event.code === 1008) {
+        showError('Неверный пароль для этой комнаты');
+        leaveRoom();
+        // После leaveRoom экран логина уже показан, но нужно убедиться
+        loginScreen?.classList.remove('hidden');
+        editorScreen?.classList.add('hidden');
+        statusDot?.classList.remove('connected');
+        if (statusText) statusText.textContent = 'Отключено';
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    });
+  }
+
+  const updateParticipants = () => {
+    if (!participantsList) return;
+    participantsList.innerHTML = '';
+    provider.awareness.getStates().forEach((state, clientId) => {
+      if (!state.user) return;
+      const li = document.createElement('li');
+      li.className = 'participant';
+      li.innerHTML = `
+        <span class="badge" style="background:${state.user.color};width:14px;height:14px;border-radius:4px;display:inline-block"></span>
+        <span class="name" style="font-size:14px">${state.user.name}</span>
+        ${clientId === provider.awareness.clientID ? '<span class="you" style="background:#e0e0e0;padding:2px 6px;border-radius:12px;font-size:11px">вы</span>' : ''}
+      `;
+      participantsList.appendChild(li);
+    });
+  };
+  provider.awareness.on('change', updateParticipants);
+  updateParticipants();
+
+  if (outputDiv) {
+    outputDiv.innerHTML = '';
+    appendText(outputDiv, '// Ожидание запуска...\n');
+  }
+}
