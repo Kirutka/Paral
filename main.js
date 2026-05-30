@@ -844,3 +844,25 @@ async function initEditor(roomId, userName, password) {
     appendText(outputDiv, '// Ожидание запуска...\n');
   }
 }
+
+// ----------------------------------------------------------------------
+// showEditor – запрос имени и пароля
+// ----------------------------------------------------------------------
+async function showEditor(roomId, isCreating = false) {
+  // Если уже есть комната – выходим из неё
+  if (currentRoomId) {
+    leaveRoom();
+    // Небольшая задержка, чтобы завершились cleanup
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  const auth = await showAuthModal(isCreating);
+  if (!auth) return;
+
+  const { name, password } = auth;
+
+  loginScreen?.classList.add('hidden');
+  editorScreen?.classList.remove('hidden');
+  window.history.replaceState({}, '', `?room=${roomId}`);
+  await initEditor(roomId, name, password);
+}
