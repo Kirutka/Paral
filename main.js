@@ -906,3 +906,16 @@ if (roomBadge) {
     }
   });
 }
+
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const theme = btn.dataset.theme;
+    if (theme) applyTheme(theme);
+  });
+});
+
+const params = new URLSearchParams(window.location.search);
+const roomFromUrl = params.get('room');
+if (roomFromUrl) {
+  showEditor(roomFromUrl, false);
+}
