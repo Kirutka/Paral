@@ -866,3 +866,43 @@ async function showEditor(roomId, isCreating = false) {
   window.history.replaceState({}, '', `?room=${roomId}`);
   await initEditor(roomId, name, password);
 }
+
+// ----------------------------------------------------------------------
+// Обработчики событий
+// ----------------------------------------------------------------------
+$('createBtn')?.addEventListener('click', () => {
+  const roomId = generateRoomId();
+  showEditor(roomId, true);
+});
+
+$('joinBtn')?.addEventListener('click', async () => {
+  const id = $('roomIdInput')?.value.trim().toUpperCase();
+  if (id) await showEditor(id, false);
+});
+
+$('shareBtn')?.addEventListener('click', () => {
+  const fullUrl = window.location.href;
+  navigator.clipboard.writeText(fullUrl);
+  showToast('Ссылка скопирована');
+});
+
+$('leaveBtn')?.addEventListener('click', leaveRoom);
+newFileBtn?.addEventListener('click', () => createNewFile());
+runBtn?.addEventListener('click', runCurrentCode);
+clearBtn?.addEventListener('click', clearTerminal);
+
+const downloadBtn = document.getElementById('downloadBtn');
+if (downloadBtn) {
+  downloadBtn.addEventListener('click', downloadProject);
+}
+
+if (roomBadge) {
+  roomBadge.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const roomId = currentRoomId;
+    if (roomId) {
+      navigator.clipboard.writeText(roomId);
+      showToast(`ID комнаты ${roomId} скопирован`);
+    }
+  });
+}
