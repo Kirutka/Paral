@@ -1,0 +1,27 @@
+{
+  "name": "codesync-diploma",
+  "version": "1.0.0",
+  "description": "Collaborative Python code editor",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "sync": "node server-sync.mjs",
+    "api": "node server-api.js",
+    "start": "concurrently \"npm run sync\" \"npm run api\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "monaco-editor": "^0.33.0",
+    "ws": "^8.16.0",
+    "y-monaco": "^0.1.4",
+    "y-websocket": "^2.0.1",
+    "yjs": "^13.6.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "concurrently": "^8.2.2"
+  },
+  "license": "MIT"
+}
