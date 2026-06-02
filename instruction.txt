@@ -1,0 +1,22 @@
+Запуск проекта (Python + Docker):
+
+0. ТРЕБОВАНИЯ: На системе должен быть установлен Docker (Docker Desktop или Docker Engine).
+
+1. Установка зависимостей Node.js:
+npm install
+
+2. Сборка Docker-образа для выполнения Python (выполнить ОДИН РАЗ):
+docker build -t python-runner -f Dockerfile.python-runner .
+
+3. В первом терминале запустить WebSocket сервер (синхронизация):
+npm run sync
+
+4. Во втором терминале запустить API сервер (выполнение Python в Docker):
+npm run api
+
+5. В третьем терминале запустить Vite dev сервер:
+npm run dev
+
+После этого открыть в браузере: http://localhost:3000
+
+(Если установлен concurrently, можно запустить бэкенд одной командой: npm run start, а затем npm run dev)
